@@ -1,18 +1,16 @@
 from datetime import datetime
 from urllib import response
-from aisuite import Client
+from src.llm import client, model_id, DEFAULT_MODEL
 from src.research_tools import (
     arxiv_search_tool,
     tavily_search_tool,
     wikipedia_search_tool,
 )
 
-client = Client()
-
 
 # === Research Agent ===
 def research_agent(
-    prompt: str, model: str = "openai:gpt-4.1-mini", return_messages: bool = False
+    prompt: str, model: str = DEFAULT_MODEL, return_messages: bool = False
 ):
     print("==================================")
     print("🔍 Research Agent")
@@ -81,7 +79,7 @@ USER RESEARCH REQUEST:
 
     try:
         resp = client.chat.completions.create(
-            model=model,
+            model=model_id(model),
             messages=messages,
             tools=tools,
             tool_choice="auto",
@@ -154,7 +152,7 @@ USER RESEARCH REQUEST:
 
 def writer_agent(
     prompt: str,
-    model: str = "openai:gpt-4.1-mini",
+    model: str = DEFAULT_MODEL,
     min_words_total: int = 2400,
     min_words_per_section: int = 400,
     max_tokens: int = 15000,
@@ -227,7 +225,7 @@ INTERNAL CHECKLIST (DO NOT INCLUDE IN OUTPUT):
 
     def _call(messages_):
         resp = client.chat.completions.create(
-            model=model,
+            model=model_id(model),
             messages=messages_,
             temperature=0,
             max_tokens=max_tokens,
@@ -248,7 +246,7 @@ INTERNAL CHECKLIST (DO NOT INCLUDE IN OUTPUT):
 
 def editor_agent(
     prompt: str,
-    model: str = "openai:gpt-4.1-mini",
+    model: str = DEFAULT_MODEL,
     target_min_words: int = 2400,
 ):
     print("==================================")
@@ -288,7 +286,7 @@ Return only the revised, polished text in Markdown format without explanatory co
     ]
 
     response = client.chat.completions.create(
-        model=model, messages=messages, temperature=0
+        model=model_id(model), messages=messages, temperature=0
     )
 
     content = response.choices[0].message.content

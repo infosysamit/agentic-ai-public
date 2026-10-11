@@ -43,8 +43,11 @@ This repo includes a Docker setup that runs **Postgres + the API in one containe
 * API keys stored in a `.env` file:
 
   ```
-  OPENAI_API_KEY=your-open-api-key
+  OPENROUTER_API_KEY=your-openrouter-api-key
   TAVILY_API_KEY=your-tavily-api-key
+  # Optional: any OpenRouter model slug (https://openrouter.ai/models)
+  # OPENROUTER_MODEL=openai/gpt-4.1-mini
+  # OPENROUTER_PLANNER_MODEL=openai/o4-mini
   ```
 
 * Python deps are installed by Docker from `requirements.txt`:
@@ -114,7 +117,7 @@ INFO:     Uvicorn running on http://0.0.0.0:8000
 ```bash
 curl -X POST http://localhost:8000/generate_report \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "Large Language Models for scientific discovery", "model":"openai:gpt-4o"}'
+  -d '{"prompt": "Large Language Models for scientific discovery", "model":"openai/gpt-4o"}'
 # -> {"task_id": "UUID..."}
 ```
 
@@ -178,8 +181,8 @@ curl http://localhost:8000/task_status/<TASK_ID>
 
 * Provide `TAVILY_API_KEY` and ensure network access, provide in the root dir and `.env` file as follows:
 ```
-# OpenAI API Key
-OPENAI_API_KEY=your-open-api-key
+# OpenRouter API Key
+OPENROUTER_API_KEY=your-openrouter-api-key
 TAVILY_API_KEY=your-tavily-api-key
 ```
 
